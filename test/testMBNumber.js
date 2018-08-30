@@ -95,7 +95,7 @@ describe('MBNumber', () => {
             mbNumber.toBase10().should.equal(2);
         });
 
-        it('The binary number "1110" less "101" should be "10"', () => {
+        it('The binary number "1110" less "101" should be "1001"', () => {
             let mbNumber = new MBNumber('1110', 2);
             mbNumber.sub(new MBNumber('101', 2));
             mbNumber.toBase2().should.equal('1001');
