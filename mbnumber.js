@@ -1,3 +1,8 @@
+/**
+ * class MBNumber
+ * @param {Int} val (The value in the selected 'base')
+ * @param {*} base (Can be 2 or 10)
+ */
 const MBNumber = class MBNumber {
     constructor(val, base) {
         if(!arguments.length) {
@@ -19,7 +24,7 @@ const MBNumber = class MBNumber {
 
     /**
      * function fromBinaryValToBase10
-     * @param {*} val must be a string
+     * @param {*} val must be a string in binary format
      */
     static fromBinaryValToBase10(val) {
         if(!(typeof(val) === "string" || val instanceof String)) {
@@ -47,6 +52,10 @@ const MBNumber = class MBNumber {
         return base10Val;
     }
 
+    /**
+     * checkValidBase - check if val is a valid base (can be 2 or 10)
+     * @param {Int} val 
+     */
     checkValidBase(val) {
         if( (Number.isInteger(val)) ||
             ((typeof(val) === "string" || val instanceof String) && Number.isInteger(parseInt(val))) ) {
@@ -63,35 +72,18 @@ const MBNumber = class MBNumber {
         }
     }
 
+    /**
+     * checkValidValue - check if val is valid in the current base and set the values for all the bases
+     * @param {Int} val 
+     */
     checkValidValue(val) {
         switch(this.base) {
         case 2:
-        {
-            if( (Number.isInteger(val)) ||
-                ((typeof(val) === "string" || val instanceof String) && Number.isInteger(parseInt(val))) ) {
-                
-                let intVal = parseInt(val);
-                this.base2Val = intVal.toString();
-                this.base10Val = MBNumber.fromBinaryValToBase10(this.base2Val);
-            }
-            else {
-                throw new Error('value is not a valid integer number in base 2');
-            }
-        }
+            this.setBase2(val);
             break;
         
         case 10:
-        {
-            if( (Number.isInteger(val)) ||
-                ((typeof(val) === "string" || val instanceof String) && Number.isInteger(parseInt(val))) ) {
-                
-                this.base10Val = parseInt(val);
-                this.base2Val = this.base10Val.toString(2);
-            }
-            else {
-                throw new Error('value is not a valid integer number in base 10');
-            }
-        }
+            this.setBase10(val);
             break;
         
         default:
@@ -99,12 +91,102 @@ const MBNumber = class MBNumber {
         }
     }
 
+    /**
+     * setBase2
+     * @param {Int} val (value in binary format)
+     */
+    setBase2(val) {
+        if( (Number.isInteger(val)) ||
+            ((typeof(val) === "string" || val instanceof String) && Number.isInteger(parseInt(val))) ) {
+            
+            let intVal = parseInt(val);
+            this.base2Val = intVal.toString();
+            this.base10Val = MBNumber.fromBinaryValToBase10(this.base2Val);
+        }
+        else {
+            throw new Error('value is not a valid integer number in base 2');
+        }
+    }
+
+    /**
+     * setBase10
+     * @param {Int} val (value in base 10 format)
+     */
+    setBase10(val) {
+        if( (Number.isInteger(val)) ||
+            ((typeof(val) === "string" || val instanceof String) && Number.isInteger(parseInt(val))) ) {
+            
+            this.base10Val = parseInt(val);
+            this.base2Val = this.base10Val.toString(2);
+        }
+        else {
+            throw new Error('value is not a valid integer number in base 10');
+        }
+    }
+
+    /**
+     * toBase2 - return the value in binary format
+     */
     toBase2() {
         return this.base2Val;
     }
 
+    /**
+     * toBase10 - return the value in base 10 format
+     */
     toBase10() {
         return this.base10Val;
+    }
+
+    
+    /// OPERATIONS ///////////////////////////////
+
+    /**
+     * sum - sums mbNum to current value
+     * @param {MBNumber} mbNum 
+     */
+    sum(mbNum) {
+        if(!(mbNum instanceof MBNumber)) {
+            throw new Error('mbNum is not an instance of MBNumber');
+        }
+
+        this.setBase10(this.toBase10() + mbNum.toBase10());
+    }
+
+    /**
+     * sub - subtracts mbNum to current value
+     * @param {MBNumber} mbNum 
+     */
+    sub(mbNum) {
+        if(!(mbNum instanceof MBNumber)) {
+            throw new Error('mbNum is not an instance of MBNumber');
+        }
+
+        this.setBase10(this.toBase10() - mbNum.toBase10());
+    }
+
+    /**
+     * mul - multiplies mbNum to current value
+     * @param {MBNumber} mbNum 
+     */
+    mul(mbNum) {
+        if(!(mbNum instanceof MBNumber)) {
+            throw new Error('mbNum is not an instance of MBNumber');
+        }
+
+        this.setBase10(this.toBase10() * mbNum.toBase10());
+    }
+
+    /**
+     * div - divide current value by mbNum
+     * @param {MBNumber} mbNum 
+     */
+    div(mbNum) {
+        if(!(mbNum instanceof MBNumber)) {
+            throw new Error('mbNum is not an instance of MBNumber');
+        }
+
+        this.setBase10(parseInt(this.toBase10() / mbNum.toBase10()));
     }
 };
 

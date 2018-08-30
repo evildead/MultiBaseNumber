@@ -47,7 +47,7 @@ describe('MBNumber', () => {
             mbNumber.toBase2().should.equal('1');
             mbNumber.toBase10().should.equal(1);
         });
-        
+
         it('The binary number "11011" should be equal to the decimal number 27', () => {
             let mbNumber = new MBNumber('11011', 2);
             mbNumber.toBase2().should.equal('11011');
@@ -70,6 +70,36 @@ describe('MBNumber', () => {
             let mbNumber = new MBNumber('2018', 10);
             mbNumber.toBase2().should.equal('11111100010');
             mbNumber.toBase10().should.equal(2018);
+        });
+    });
+
+    describe('Check operations', () => {
+        it('The sum of binary numbers "11011" and "1000" should be "100011"', () => {
+            let mbNumber = new MBNumber('11011', 2);
+            mbNumber.sum(new MBNumber('1000', 2));
+            mbNumber.toBase2().should.equal('100011');
+            mbNumber.toBase10().should.equal(35);
+        });
+
+        it('The multiplication of binary numbers "10001101" and "111" should be "1111011011"', () => {
+            let mbNumber = new MBNumber('10001101', 2);
+            mbNumber.mul(new MBNumber('111', 2));
+            mbNumber.toBase2().should.equal('1111011011');
+            mbNumber.toBase10().should.equal(987);
+        });
+        
+        it('The binary number "1110" divided by "101" should be "10"', () => {
+            let mbNumber = new MBNumber('1110', 2);
+            mbNumber.div(new MBNumber('101', 2));
+            mbNumber.toBase2().should.equal('10');
+            mbNumber.toBase10().should.equal(2);
+        });
+
+        it('The binary number "1110" less "101" should be "10"', () => {
+            let mbNumber = new MBNumber('1110', 2);
+            mbNumber.sub(new MBNumber('101', 2));
+            mbNumber.toBase2().should.equal('1001');
+            mbNumber.toBase10().should.equal(9);
         });
     });
 });
